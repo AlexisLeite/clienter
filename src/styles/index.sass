@@ -1,0 +1,194 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;700&display=swap')
+@import "./mixins"
+
+$primary: #c8d7da
+$primary-back: #222
+$primary-hover: #fffb89
+  
+body
+  background: $primary-back
+  margin: 1vw
+  font-size: 100%
+  font-family: Montserrat, sans-serif
+  color: $primary
+  border-color: $primary
+
+  *
+    box-sizing: border-box
+    color: inherit
+    border-color: inherit
+    font-family: inherit
+
+  #root
+    display: flex
+    height: calc(100vh - 2vw)
+    align-items: center
+
+    button 
+      background: $primary
+      color: $primary-back
+      border: 0
+      cursor: pointer
+      font-size: 1em
+      border-radius: 0.3em
+      padding: 0.3em
+
+      @include hover
+        background: $primary-hover
+
+      &.transparent
+        background: none
+
+        @include hover
+          color: $primary-hover
+
+    #options
+      position: fixed
+      bottom: 0
+      left: 0
+      margin: 10px
+
+      button
+        font-size: 1.5em
+        margin-right: 0.2em
+        width: 1.5em
+        height: 1.5em
+        cursor: pointer
+
+        @include hover
+          background: $primary-hover
+
+    #home-left-panel, #home-right-panel
+      width: 49vw
+      flex: 10 0 auto
+      height: 85vh
+      display: flex
+      align-items: center
+      justify-content: center
+      flex-direction: column
+
+    #home-right-panel
+      border-left-width: 1px
+      border-left-style: solid
+      padding-left: 1em
+
+      .search-results
+        overflow: auto
+        width: 100%
+
+        a
+          width: 80%
+          margin: 5px auto
+          padding: 10px
+          text-decoration: none
+          display: block
+
+          @include hover
+            color: $primary-hover
+            background: transparentize($primary-hover,0.95)
+
+          .search-result
+            padding-bottom: 1em
+
+            &:nth-child(even)
+              background: transparentize($primary, 0.3)
+              color: black
+
+            .order-details
+
+              strong
+                float: right
+                font-size: 1.1em
+
+              i
+                max-height: 2.4em
+                line-height: 1.2em
+                display: block
+                overflow: hidden
+
+      #new-order
+        width: 100%
+        overflow: auto
+
+        h2
+          font-size: 2em
+
+        li
+          text-align: center
+
+          &:nth-last-child(1)
+            padding-top: 20px
+
+        input, textarea
+          font-size: 1.8em
+          padding: 5px 5px 5px 15px
+          background: $primary-back
+          margin: 5px 0
+          border-radius: 7px
+          width: 100%
+          text-align: left
+
+          
+          &::placeholder
+            color: transparentize($primary, 0.6)
+
+          &:focus
+            border-color: $primary-hover
+
+          &:focus-visible
+            outline-width: 0
+
+        ul
+          list-style: none
+          margin: 0
+          padding: 0
+
+        textarea
+          font-size: 1.5em
+          height: 20vh
+
+        button
+          font-size: 1.4em
+
+    #home-left-panel
+      
+      h1
+        font-size: 60px
+        margin-bottom: 0.5em
+        
+        a
+          text-decoration: none
+
+          @include hover
+            color: $primary-hover
+
+      .search
+        display: flex
+        align-items: center
+
+        input
+          padding: 5px
+          font-size: 1.5em
+          text-align: center
+          color: black
+
+        button
+          padding: 0
+          font-size: 1em
+
+          svg
+            font-size: 3em
+            color: $primary
+          
+
+      #home-links
+        position: fixed
+        bottom: 2em
+        margin-top: 2em
+
+        a
+          padding: 10px
+          margin: 3px
+
+          @include hover
+            color: $primary-hover
