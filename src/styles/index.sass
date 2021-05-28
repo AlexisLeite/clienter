@@ -1,17 +1,60 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;700&display=swap')
-@import "./mixins"
+@import url('https://fonts.googleapis.com/css2?family=Sigmar+One&display=swap')
+@import "./mixins", "./loaders"
 
 $primary: #c8d7da
 $primary-back: #222
 $primary-hover: #fffb89
+
+*::-webkit-scrollbar 
+  width: 0
+
+*::-webkit-scrollbar-track 
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3)
+ 
+*::-webkit-scrollbar-thumb 
+  background-color: darkgrey
+  outline: 1px solid slategrey
+
   
 body
   background: $primary-back
-  margin: 1vw
+  margin: 0
   font-size: 100%
   font-family: Montserrat, sans-serif
   color: $primary
   border-color: $primary
+  
+  .modal-background
+    position: fixed
+    top: 0
+    left: 0
+    right: 0
+    bottom: 0
+    display: flex
+    align-items: center
+    justify-content: center
+    background: #000000cc
+    z-index: 10
+
+    .modal
+      box-shadow: 0 2px 15px 0 #ffffff55
+
+      .modal-body
+        overflow: auto
+        min-width: 300px
+        max-width: 95vw
+        min-height: 150px
+        max-height: 90vh
+        background: black
+
+      .modal-header
+        background: $primary-hover
+        color: black
+        font-weight: bold
+        font-size: 1.2em
+        padding: 5px
+        text-align: center
 
   *
     box-sizing: border-box
@@ -23,6 +66,33 @@ body
     display: flex
     height: calc(100vh - 2vw)
     align-items: center
+    transition-duration: 1.5s
+
+    &.elegant
+      .search
+        input
+            opacity: 0
+            height: 0
+            margin: 0
+            padding: 0
+            font-size: 0
+            transition-duration: 0.5s
+
+    &.elegant, &.elegant-fixed
+
+      #home-left-panel
+        width: 50vw
+        transition-duration: 1.5s
+
+        h1 a
+          transition-duration: 1s
+          color: $primary-hover
+          font-size: 5.5vw
+          text-shadow: 0 0 20px transparentize($primary-hover,0.8)
+    
+    a
+      @include hover
+        color: $primary-hover
 
     button 
       background: $primary
@@ -33,6 +103,15 @@ body
       border-radius: 0.3em
       padding: 0.3em
 
+      &.cancel
+        background: transparentize($primary, 0.8)
+
+      &.icon
+        font: 1em 'Sigmar One'
+        padding: 0 3px
+        display: inline-block
+        margin: 2px
+
       @include hover
         background: $primary-hover
 
@@ -41,6 +120,82 @@ body
 
         @include hover
           color: $primary-hover
+
+    textarea
+      min-height: 6em
+
+    form.create-new
+      padding: 10px
+      min-width: 60vw
+      text-align: center
+
+      input, textarea
+        text-align: left
+        display: block
+        width: 100%
+        margin: 0 0 3px 0
+        font-size: 1.2em
+
+      textarea
+        height: 30vh
+
+      button
+        padding: 5px
+        border-radius: 0
+        margin-top: 10px
+        font-size: 1.2em
+        font-weight: bold
+
+    .data-source-table
+      width: 100%
+      border: 1px solid $primary
+      border-collapse: collapse
+
+      tr
+        border-bottom: 1px solid transparentize($primary,0.7)
+        cursor: pointer
+
+      td,th
+        padding: 6px 20px
+
+      th
+        background: transparentize($primary-hover, 0.6)
+
+      tbody tr
+        @include hover
+          td 
+            background: transparentize($primary-hover, 0.95)
+
+    .error
+      color: red
+      text-shadow: 0 0 #fff7
+
+    .navigation
+      display: flex
+      justify-content: center
+      position: absolute
+      bottom: 10px
+      flex-wrap: wrap
+
+      &.relative
+        position: relative
+        width: 100%
+       
+      small
+        flex-basis: 100%
+        text-align: center
+
+      button
+        border-radius: 0
+        margin-right: 5px
+        padding: 0.5em
+        font-size: 1.2em
+
+        &:last-of-type
+          margin-right: 0
+
+        &:disabled
+          background: #555
 
     #options
       position: fixed
@@ -59,25 +214,69 @@ body
           background: $primary-hover
 
     #home-left-panel, #home-right-panel
-      width: 49vw
-      flex: 10 0 auto
+      flex: auto
       height: 85vh
       display: flex
       align-items: center
       justify-content: center
       flex-direction: column
 
+
     #home-right-panel
       border-left-width: 1px
       border-left-style: solid
-      padding-left: 1em
+      padding: 0  1em
+      flex-grow: 10
+      flex-basis: 10
+
+      input, textarea
+        padding: 5px 5px 5px 15px
+        background: $primary-back
+        margin: 5px 0
+        border-radius: 7px
+        width: 100%
+        text-align: left
+
+      & > div:first-of-type
+        width: 100%
+        overflow: auto
+        
+      .client-details.widget
+        width: 100%
+        max-width: 20em
+        padding: 10px
+        border: 1px solid $primary
+        margin: auto
+
+        h3
+          margin: 0 0 10px 0
+          border-bottom: 1px solid $primary
+
+          a
+            float: right
+            font-weight: 900
+            font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif
+            text-shadow: 0 0 2px black
+            padding: 0 0.3em
+            margin-top: -0.3em
+
+        div
+          display: flex
+
+          strong
+            display: block
+            width: 6em
+            margin-left: 1em
+
+          span
+            display: block
 
       .search-results
         overflow: auto
         width: 100%
 
         a
-          width: 80%
+          width: 95%
           margin: 5px auto
           padding: 10px
           text-decoration: none
@@ -94,39 +293,212 @@ body
               background: transparentize($primary, 0.3)
               color: black
 
+            .order-data
+              .commands
+                float: right
+
             .order-details
 
               strong
-                float: right
                 font-size: 1.1em
+
+                &.date
+                  float: right
 
               i
                 max-height: 2.4em
                 line-height: 1.2em
-                display: block
+                margin-right: 10px
                 overflow: hidden
+
+      #clients-list
+        & > div
+          display: flex
+          flex-direction: column
+          align-items: center
+
+        .commands
+          display: flex
+          align-items: center
+          margin-bottom: 0.5em
+
+          button
+            margin-left: 10px
+
+          input 
+            border-radius: 5px
+            width: 100%
+            padding: 0.2em
+            padding-left: 0.5em
+            font-size: 1.1em  
+
+        h3
+          margin: 0.5em 0
+
+
+        .list
+          width: 100%
+
+          h3, strong
+            display: none
+
+          .client-body
+            width: 100%
+            overflow: auto
+            max-height: 75vh
+
+          .client-details, .client-header
+            width: 100%
+            cursor: pointer
+            display: grid
+            grid-template-columns: 23% 30% 23% 24%
+
+            @include hover
+              background: transparentize($primary-hover,0.1)
+              color: black
+
+            &.client-header
+              font-weight: bold
+              text-align: center
+
+            div
+              border-bottom: 1px solid $primary
+              padding: 4px 10px
+
+              &:nth-child(even)
+                background: transparentize($primary-hover, 0.9)
+
+      #order-details
+        padding-bottom: 20px
+        padding-right: 10px
+
+        .modal-body 
+          width: 60vw
+          text-align: center
+
+        .commands
+          position: absolute
+          bottom: 10px
+          text-align: center
+          width: 45vw
+
+        table
+          width: 100%
+          border: 1px solid $primary
+          border-collapse: collapse
+          margin-top: 10px
+
+          thead
+            cursor: pointer
+
+            &.hide-body 
+              border-bottom: 1px solid black
+
+              & + tbody
+                display: none
+
+            th
+              font-size: 1.4em
+              background: transparentize($primary-hover, 0.1)
+              color: $primary-back
+              padding: 10px 20px
+
+          tbody
+            &:not(.updates)
+              tr
+                border-bottom: 1px solid transparentize($primary,0.5)
+
+                @include hover
+                  background: transparentize($primary-hover,0.9)
+
+              tr:first-child
+                th, td
+                  padding-top: 20px
+
+              tr:last-child
+                th, td
+                  padding-bottom: 20px
+
+            th
+              width: 1px
+              text-align: left
+              padding: 7px 10px
+
+            td
+              padding-left: 30px
+
+              &.number
+                color: $primary-hover
+                font-weight: bold
+                text-shadow: 0 0 5px black
+                font-size: 1.1em
+
+            &.updates
+
+              th, td
+                padding: 10px !important
+
+              table
+                margin: 0 0 5px 0 !important
+                border-color: transparentize($primary, 0.8)
+                    
+                @include hover
+                  tbody tr
+                    background: transparentize($primary-hover, 0.9)
+
+                thead 
+                  border-bottom: 1px solid transparentize($primary, 0.8)
+
+                  tr 
+                    background: linear-gradient(180deg, #222, black)
+
+                  th
+                    font-size: inherit
+                    background: none
+                    color: $primary
+
+                tbody
+                  tr
+                    background: #252525
 
       #new-order
         width: 100%
         overflow: auto
+        padding-right: 20px
 
         h2
           font-size: 2em
+          text-align: center
 
         li
           text-align: center
+          display: flex
+          justify-content: center
+          margin-bottom: 5px
+          align-items: center
+          font-size: 1.2em
+
+          *
+            font-size: 1em
+
+          input, textarea
+            margin: 0
+
+          a
+            display: block
+            cursor: pointer
+            margin-left: 5px
+            padding: 3px 10px
+            font-weight: bold
+            background: $primary
+            color: black
+            border-radius: 5px
+
+            @include hover
+              background: $primary-hover
 
           &:nth-last-child(1)
             padding-top: 20px
-
-        input, textarea
-          font-size: 1.8em
-          padding: 5px 5px 5px 15px
-          background: $primary-back
-          margin: 5px 0
-          border-radius: 7px
-          width: 100%
-          text-align: left
 
           
           &::placeholder
@@ -144,23 +516,25 @@ body
           padding: 0
 
         textarea
-          font-size: 1.5em
           height: 20vh
 
-        button
-          font-size: 1.4em
-
     #home-left-panel
+      transition-duration: 0.3s
+      padding: 1vw
+      flex-shrink: 10
+      flex-grow: 0
+      width: 26vw
       
       h1
         font-size: 60px
         margin-bottom: 0.5em
-        
+
         a
           text-decoration: none
-
-          @include hover
-            color: $primary-hover
+          white-space: nowrap
+          font-size: 4vw
+          padding: 1vw
+          transition-duration: 0.3s
 
       .search
         display: flex
@@ -171,6 +545,8 @@ body
           font-size: 1.5em
           text-align: center
           color: black
+          width: 20vw
+          transition-duration: 0.3s
 
         button
           padding: 0
@@ -189,6 +565,3 @@ body
         a
           padding: 10px
           margin: 3px
-
-          @include hover
-            color: $primary-hover

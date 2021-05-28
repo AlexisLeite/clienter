@@ -1,5 +1,9 @@
 export function api(route) {
-  return `${env("gameApi")}/${route}`;
+  if (route.charAt(0) === "/") route = route.substring(1);
+  return `${env("api")}/${route}`;
+}
+export function server(route) {
+  return `/${route}`;
 }
 
 // Usage: className(ifOneClass,"oneClass",ifSecondClass,"secondClass"...)
@@ -33,26 +37,28 @@ export function exists(obj, route, cb) {
 }
 
 export function EasyEvents() {
-  this.easyEventsId = 0;
-  this.easyEvents = [];
+  const self = this;
 
-  this.addEvent = function (name) {
+  self.easyEventsId = 0;
+  self.easyEvents = [];
+
+  self.addEvent = function (name) {
     name = ucFirst(name);
-    this.easyEvents.push(name);
-    this[`on${name}Callbacks`] = [];
-    this[`onRegister${name}Callbacks`] = [];
-    this[`off${name}`] = function (suscription) {
-      if (exists(this, `on${name}Callbacks`))
-        this[`on${name}Callbacks`] = this[`on${name}Callbacks`].filter(
+    self.easyEvents.push(name);
+    self[`on${name}Callbacks`] = [];
+    self[`onRegister${name}Callbacks`] = [];
+    self[`off${name}`] = function (suscription) {
+      if (exists(self, `on${name}Callbacks`))
+        self[`on${name}Callbacks`] = self[`on${name}Callbacks`].filter(
           (record) => record.callback !== suscription.callback || record.id !== suscription.id
         );
     };
-    this[`on${name}`] = function (callback) {
+    self[`on${name}`] = function (callback) {
       if (typeof callback == "function") {
-        let id = this.easyEventsId++;
-        this[`on${name}Callbacks`].push({ callback: callback, id });
+        let id = self.easyEventsId++;
+        self[`on${name}Callbacks`].push({ callback: callback, id });
 
-        for (let onRegisterCb of this[`onRegister${name}Callbacks`]) {
+        for (let onRegisterCb of self[`onRegister${name}Callbacks`]) {
           onRegisterCb.callback(callback);
         }
 
@@ -60,45 +66,61 @@ export function EasyEvents() {
           callback,
           id,
           cancel: () => {
-            this[`off${name}`]({ callback, id });
+            self[`off${name}`]({ callback, id });
           },
         };
       }
     };
-    this[`onRegister${name}`] = function (cb) {
+    self[`onRegister${name}`] = function (cb) {
       if (typeof cb == "function") {
-        let newId = this.easyEventsId++;
-        this[`onRegister${name}Callbacks`].push({ callback: cb, id: newId });
+        let newId = self.easyEventsId++;
+        self[`onRegister${name}Callbacks`].push({ callback: cb, id: newId });
         return newId;
       }
     };
 
-    this[`fire${name}`] = function (...args) {
-      for (let record of this[`on${name}Callbacks`]) record.callback(...args);
+    self[`fire${name}`] = function (...args) {
+      for (let record of self[`on${name}Callbacks`]) record.callback(...args);
     };
   };
 
-  this.addEvents = function (events) {
+  self.addEvents = function (events) {
     for (let event of events) {
-      this.addEvent(event);
+      self.addEvent(event);
     }
   };
 
-  this.off = function (event, suscription) {
-    if (`off${ucFirst(event)}` in this) return this[`off${ucFirst(event)}`]();
+  self.off = function (event, suscription) {
+    if (`off${ucFirst(event)}` in self) return self[`off${ucFirst(event)}`]();
   };
 
-  this.on = function (event, handler) {
-    if (!(`on${ucFirst(event)}` in this)) {
-      this.addEvent(event);
+  self.on = function (event, handler) {
+    if (!(`on${ucFirst(event)}` in self)) {
+      self.addEvent(event);
     }
-    return this[`on${ucFirst(event)}`](handler);
+    return self[`on${ucFirst(event)}`](handler);
   };
+}
+
+export function Error(params) {
+  return params.message ? <div className="error">{params.message}</div> : "";
 }
 
 export function hashes(ammount) {
   var array = new Uint32Array(ammount);
   return window.crypto.getRandomValues(array);
+}
+
+export function easySuscriptions() {
+  const self = this;
+
+  self.suscriptions = [];
+  self.makeSuscriptions = function (...suscriptions) {
+    for (let suscription of suscriptions) self.suscriptions.push(suscription);
+  };
+  self.cancelSuscriptions = () => {
+    for (let suscription of self.suscriptions) exists(suscription, "cancel", (cancel) => cancel());
+  };
 }
 
 export function max(...args) {

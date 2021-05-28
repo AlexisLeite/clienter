@@ -1,24 +1,50 @@
 import React, { Component } from "react";
-import { Link, Route } from "react-router-dom";
-import Search from "services/search";
-import HomeOrders from "./homeorders";
+import { Link, Route, Switch } from "react-router-dom";
+import HomeOrders from "./homeOrders";
 import { TiDelete } from "react-icons/ti";
 import NewOrder from "./neworder";
+import Orderdetails from "./orderDetails";
+import History from "./history";
+import { Orders } from "services/data";
+import ControlledChangeInput from "./controlledChangeInput";
+import { easySuscriptions, Error } from "./../common";
+import { ServerLoader } from "services/serverComunication";
+import { fixRootClass, unfixRootClass } from "index";
+import ClientsList from "./clientsList";
 
 class SplitView extends Component {
   state = {
-    results: null,
+    results: [],
   };
-
-  searchOrder = (q) => {
-    this.setState({ query: q });
-    Search.go(q);
-  };
-
+  errorsSuscription = null;
   searchRef = React.createRef();
+  updatesSuscription = null;
 
   componentDidMount() {
     if (this.searchRef.current) this.searchRef.current.focus();
+    easySuscriptions.call(this);
+    this.makeSuscriptions(
+      Orders.onUpdate((results) => {
+        this.setState({ results, error: null });
+      }),
+      Orders.onError((error) => {
+        this.setState({ error });
+      }),
+      History.onLocationChange((location) => {
+        if (location === "/") this.doSearch();
+      })
+    );
+    this.doSearch();
+  }
+
+  componentWillUnmount() {
+    this.cancelSuscriptions();
+  }
+
+  doSearch(q = null) {
+    if (this.state.results.length === 0 || q !== null) Orders.get(q);
+    else Orders.repeatLastQuery();
+    this.setState({ error: null });
   }
 
   render() {
@@ -26,23 +52,39 @@ class SplitView extends Component {
       <>
         <div id="home-left-panel">
           <h1>
-            <Link to="/">IA Uruguay</Link>
+            <a
+              href="/"
+              onClick={(ev) => {
+                ev.preventDefault();
+                History.go("/");
+              }}
+            >
+              IA Uruguay
+            </a>
           </h1>
           <div className="search">
             <Route exact path="/">
-              <input
+              <ControlledChangeInput
                 type="text"
                 placeholder="Buscar"
-                ref={this.searchRef}
-                value={Search.query}
-                onChange={(ev) => this.searchOrder(ev.target.value)}
+                reference={this.searchRef}
+                onChange={(val) => {
+                  this.doSearch(val);
+                }}
+                onBlur={(ev) => {
+                  unfixRootClass();
+                }}
+                onFocus={(ev) => {
+                  fixRootClass("elegant-fixed");
+                }}
+                recover={Orders.currentQueryString}
               />
-              {Search.query !== "" && (
+              {this.searchRef.current && this.searchRef.current.value.length > 0 && (
                 <button
                   onClick={() => {
                     this.searchRef.current.value = "";
                     this.searchRef.current.focus();
-                    this.searchOrder("");
+                    this.doSearch("");
                   }}
                   className="transparent"
                 >
@@ -51,18 +93,27 @@ class SplitView extends Component {
               )}
             </Route>
           </div>
+          <ServerLoader />
           <div id="home-links">
             <Link to="/clients">Clientes</Link>
-            <Link to="/new">Nueva orden</Link>
+            <Link to="/orders/new">Nueva orden</Link>
           </div>
         </div>
         <div id="home-right-panel">
-          <Route exact path="/">
-            <HomeOrders q={Search.query} />
-          </Route>
-          <Route exact path="/new">
-            <NewOrder />
-          </Route>
+          <Switch>
+            <Route exact path="/">
+              <Error message={this.state.error} />
+              <HomeOrders
+                results={this.state.results}
+                onDelete={() => {
+                  Orders.repeatLastQuery();
+                }}
+              />
+            </Route>
+            <Route exact path="/clients" component={ClientsList} />
+            <Route exact path="/orders/new" component={NewOrder} />
+            <Route exact path="/orders/:id" component={Orderdetails} />
+          </Switch>
         </div>
       </>
     );

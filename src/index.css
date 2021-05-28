@@ -1,11 +1,116 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Sigmar+One&display=swap");
+.lds-ellipsis {
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  bottom: 5em;
+}
+
+.lds-ellipsis div {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #fffb89;
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+
+.lds-ellipsis div:nth-child(1) {
+  left: 8px;
+  animation: lds-ellipsis1 0.6s infinite;
+}
+
+.lds-ellipsis div:nth-child(2) {
+  left: 8px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+
+.lds-ellipsis div:nth-child(3) {
+  left: 20px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+
+.lds-ellipsis div:nth-child(4) {
+  left: 32px;
+  animation: lds-ellipsis3 0.6s infinite;
+}
+
+@keyframes lds-ellipsis1 {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes lds-ellipsis3 {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+@keyframes lds-ellipsis2 {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(12px, 0);
+  }
+}
+*::-webkit-scrollbar {
+  width: 0;
+}
+
+*::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  outline: 1px solid slategrey;
+}
+
 body {
   background: #222;
-  margin: 1vw;
+  margin: 0;
   font-size: 100%;
   font-family: Montserrat, sans-serif;
   color: #c8d7da;
   border-color: #c8d7da;
+}
+body .modal-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000000cc;
+  z-index: 10;
+}
+body .modal-background .modal {
+  box-shadow: 0 2px 15px 0 #ffffff55;
+}
+body .modal-background .modal .modal-body {
+  overflow: auto;
+  min-width: 300px;
+  max-width: 95vw;
+  min-height: 150px;
+  max-height: 90vh;
+  background: black;
+}
+body .modal-background .modal .modal-header {
+  background: #fffb89;
+  color: black;
+  font-weight: bold;
+  font-size: 1.2em;
+  padding: 5px;
+  text-align: center;
 }
 body * {
   box-sizing: border-box;
@@ -17,6 +122,28 @@ body #root {
   display: flex;
   height: calc(100vh - 2vw);
   align-items: center;
+  transition-duration: 1.5s;
+}
+body #root.elegant .search input {
+  opacity: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  font-size: 0;
+  transition-duration: 0.5s;
+}
+body #root.elegant #home-left-panel, body #root.elegant-fixed #home-left-panel {
+  width: 50vw;
+  transition-duration: 1.5s;
+}
+body #root.elegant #home-left-panel h1 a, body #root.elegant-fixed #home-left-panel h1 a {
+  transition-duration: 1s;
+  color: #fffb89;
+  font-size: 5.5vw;
+  text-shadow: 0 0 20px rgba(255, 251, 137, 0.2);
+}
+body #root a:hover, body #root a:active, body #root a:focus {
+  color: #fffb89;
 }
 body #root button {
   background: #c8d7da;
@@ -27,6 +154,15 @@ body #root button {
   border-radius: 0.3em;
   padding: 0.3em;
 }
+body #root button.cancel {
+  background: rgba(200, 215, 218, 0.2);
+}
+body #root button.icon {
+  font: 1em "Sigmar One";
+  padding: 0 3px;
+  display: inline-block;
+  margin: 2px;
+}
 body #root button:hover, body #root button:active, body #root button:focus {
   background: #fffb89;
 }
@@ -35,6 +171,80 @@ body #root button.transparent {
 }
 body #root button.transparent:hover, body #root button.transparent:active, body #root button.transparent:focus {
   color: #fffb89;
+}
+body #root textarea {
+  min-height: 6em;
+}
+body #root form.create-new {
+  padding: 10px;
+  min-width: 60vw;
+  text-align: center;
+}
+body #root form.create-new input, body #root form.create-new textarea {
+  text-align: left;
+  display: block;
+  width: 100%;
+  margin: 0 0 3px 0;
+  font-size: 1.2em;
+}
+body #root form.create-new textarea {
+  height: 30vh;
+}
+body #root form.create-new button {
+  padding: 5px;
+  border-radius: 0;
+  margin-top: 10px;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+body #root .data-source-table {
+  width: 100%;
+  border: 1px solid #c8d7da;
+  border-collapse: collapse;
+}
+body #root .data-source-table tr {
+  border-bottom: 1px solid rgba(200, 215, 218, 0.3);
+  cursor: pointer;
+}
+body #root .data-source-table td, body #root .data-source-table th {
+  padding: 6px 20px;
+}
+body #root .data-source-table th {
+  background: rgba(255, 251, 137, 0.4);
+}
+body #root .data-source-table tbody tr:hover td, body #root .data-source-table tbody tr:active td, body #root .data-source-table tbody tr:focus td {
+  background: rgba(255, 251, 137, 0.05);
+}
+body #root .error {
+  color: red;
+  text-shadow: 0 0 #fff7;
+}
+body #root .navigation {
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  bottom: 10px;
+  flex-wrap: wrap;
+}
+body #root .navigation.relative {
+  position: relative;
+  width: 100%;
+}
+body #root .navigation small {
+  flex-basis: 100%;
+  text-align: center;
+}
+body #root .navigation button {
+  border-radius: 0;
+  margin-right: 5px;
+  padding: 0.5em;
+  font-size: 1.2em;
+}
+body #root .navigation button:last-of-type {
+  margin-right: 0;
+}
+body #root .navigation button:disabled {
+  background: #555;
 }
 body #root #options {
   position: fixed;
@@ -53,8 +263,7 @@ body #root #options button:hover, body #root #options button:active, body #root 
   background: #fffb89;
 }
 body #root #home-left-panel, body #root #home-right-panel {
-  width: 49vw;
-  flex: 10 0 auto;
+  flex: auto;
   height: 85vh;
   display: flex;
   align-items: center;
@@ -64,14 +273,58 @@ body #root #home-left-panel, body #root #home-right-panel {
 body #root #home-right-panel {
   border-left-width: 1px;
   border-left-style: solid;
-  padding-left: 1em;
+  padding: 0 1em;
+  flex-grow: 10;
+  flex-basis: 10;
+}
+body #root #home-right-panel input, body #root #home-right-panel textarea {
+  padding: 5px 5px 5px 15px;
+  background: #222;
+  margin: 5px 0;
+  border-radius: 7px;
+  width: 100%;
+  text-align: left;
+}
+body #root #home-right-panel > div:first-of-type {
+  width: 100%;
+  overflow: auto;
+}
+body #root #home-right-panel .client-details.widget {
+  width: 100%;
+  max-width: 20em;
+  padding: 10px;
+  border: 1px solid #c8d7da;
+  margin: auto;
+}
+body #root #home-right-panel .client-details.widget h3 {
+  margin: 0 0 10px 0;
+  border-bottom: 1px solid #c8d7da;
+}
+body #root #home-right-panel .client-details.widget h3 a {
+  float: right;
+  font-weight: 900;
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  text-shadow: 0 0 2px black;
+  padding: 0 0.3em;
+  margin-top: -0.3em;
+}
+body #root #home-right-panel .client-details.widget div {
+  display: flex;
+}
+body #root #home-right-panel .client-details.widget div strong {
+  display: block;
+  width: 6em;
+  margin-left: 1em;
+}
+body #root #home-right-panel .client-details.widget div span {
+  display: block;
 }
 body #root #home-right-panel .search-results {
   overflow: auto;
   width: 100%;
 }
 body #root #home-right-panel .search-results a {
-  width: 80%;
+  width: 95%;
   margin: 5px auto;
   padding: 10px;
   text-decoration: none;
@@ -88,45 +341,207 @@ body #root #home-right-panel .search-results a .search-result:nth-child(even) {
   background: rgba(200, 215, 218, 0.7);
   color: black;
 }
-body #root #home-right-panel .search-results a .search-result .order-details strong {
+body #root #home-right-panel .search-results a .search-result .order-data .commands {
   float: right;
+}
+body #root #home-right-panel .search-results a .search-result .order-details strong {
   font-size: 1.1em;
+}
+body #root #home-right-panel .search-results a .search-result .order-details strong.date {
+  float: right;
 }
 body #root #home-right-panel .search-results a .search-result .order-details i {
   max-height: 2.4em;
   line-height: 1.2em;
-  display: block;
+  margin-right: 10px;
   overflow: hidden;
+}
+body #root #home-right-panel #clients-list > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+body #root #home-right-panel #clients-list .commands {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5em;
+}
+body #root #home-right-panel #clients-list .commands button {
+  margin-left: 10px;
+}
+body #root #home-right-panel #clients-list .commands input {
+  border-radius: 5px;
+  width: 100%;
+  padding: 0.2em;
+  padding-left: 0.5em;
+  font-size: 1.1em;
+}
+body #root #home-right-panel #clients-list h3 {
+  margin: 0.5em 0;
+}
+body #root #home-right-panel #clients-list .list {
+  width: 100%;
+}
+body #root #home-right-panel #clients-list .list h3, body #root #home-right-panel #clients-list .list strong {
+  display: none;
+}
+body #root #home-right-panel #clients-list .list .client-body {
+  width: 100%;
+  overflow: auto;
+  max-height: 75vh;
+}
+body #root #home-right-panel #clients-list .list .client-details, body #root #home-right-panel #clients-list .list .client-header {
+  width: 100%;
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: 23% 30% 23% 24%;
+}
+body #root #home-right-panel #clients-list .list .client-details:hover, body #root #home-right-panel #clients-list .list .client-details:active, body #root #home-right-panel #clients-list .list .client-details:focus, body #root #home-right-panel #clients-list .list .client-header:hover, body #root #home-right-panel #clients-list .list .client-header:active, body #root #home-right-panel #clients-list .list .client-header:focus {
+  background: rgba(255, 251, 137, 0.9);
+  color: black;
+}
+body #root #home-right-panel #clients-list .list .client-details.client-header, body #root #home-right-panel #clients-list .list .client-header.client-header {
+  font-weight: bold;
+  text-align: center;
+}
+body #root #home-right-panel #clients-list .list .client-details div, body #root #home-right-panel #clients-list .list .client-header div {
+  border-bottom: 1px solid #c8d7da;
+  padding: 4px 10px;
+}
+body #root #home-right-panel #clients-list .list .client-details div:nth-child(even), body #root #home-right-panel #clients-list .list .client-header div:nth-child(even) {
+  background: rgba(255, 251, 137, 0.1);
+}
+body #root #home-right-panel #order-details {
+  padding-bottom: 20px;
+  padding-right: 10px;
+}
+body #root #home-right-panel #order-details .modal-body {
+  width: 60vw;
+  text-align: center;
+}
+body #root #home-right-panel #order-details .commands {
+  position: absolute;
+  bottom: 10px;
+  text-align: center;
+  width: 45vw;
+}
+body #root #home-right-panel #order-details table {
+  width: 100%;
+  border: 1px solid #c8d7da;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+body #root #home-right-panel #order-details table thead {
+  cursor: pointer;
+}
+body #root #home-right-panel #order-details table thead.hide-body {
+  border-bottom: 1px solid black;
+}
+body #root #home-right-panel #order-details table thead.hide-body + tbody {
+  display: none;
+}
+body #root #home-right-panel #order-details table thead th {
+  font-size: 1.4em;
+  background: rgba(255, 251, 137, 0.9);
+  color: #222;
+  padding: 10px 20px;
+}
+body #root #home-right-panel #order-details table tbody:not(.updates) tr {
+  border-bottom: 1px solid rgba(200, 215, 218, 0.5);
+}
+body #root #home-right-panel #order-details table tbody:not(.updates) tr:hover, body #root #home-right-panel #order-details table tbody:not(.updates) tr:active, body #root #home-right-panel #order-details table tbody:not(.updates) tr:focus {
+  background: rgba(255, 251, 137, 0.1);
+}
+body #root #home-right-panel #order-details table tbody:not(.updates) tr:first-child th, body #root #home-right-panel #order-details table tbody:not(.updates) tr:first-child td {
+  padding-top: 20px;
+}
+body #root #home-right-panel #order-details table tbody:not(.updates) tr:last-child th, body #root #home-right-panel #order-details table tbody:not(.updates) tr:last-child td {
+  padding-bottom: 20px;
+}
+body #root #home-right-panel #order-details table tbody th {
+  width: 1px;
+  text-align: left;
+  padding: 7px 10px;
+}
+body #root #home-right-panel #order-details table tbody td {
+  padding-left: 30px;
+}
+body #root #home-right-panel #order-details table tbody td.number {
+  color: #fffb89;
+  font-weight: bold;
+  text-shadow: 0 0 5px black;
+  font-size: 1.1em;
+}
+body #root #home-right-panel #order-details table tbody.updates th, body #root #home-right-panel #order-details table tbody.updates td {
+  padding: 10px !important;
+}
+body #root #home-right-panel #order-details table tbody.updates table {
+  margin: 0 0 5px 0 !important;
+  border-color: rgba(200, 215, 218, 0.2);
+}
+body #root #home-right-panel #order-details table tbody.updates table:hover tbody tr, body #root #home-right-panel #order-details table tbody.updates table:active tbody tr, body #root #home-right-panel #order-details table tbody.updates table:focus tbody tr {
+  background: rgba(255, 251, 137, 0.1);
+}
+body #root #home-right-panel #order-details table tbody.updates table thead {
+  border-bottom: 1px solid rgba(200, 215, 218, 0.2);
+}
+body #root #home-right-panel #order-details table tbody.updates table thead tr {
+  background: linear-gradient(180deg, #222, black);
+}
+body #root #home-right-panel #order-details table tbody.updates table thead th {
+  font-size: inherit;
+  background: none;
+  color: #c8d7da;
+}
+body #root #home-right-panel #order-details table tbody.updates table tbody tr {
+  background: #252525;
 }
 body #root #home-right-panel #new-order {
   width: 100%;
   overflow: auto;
+  padding-right: 20px;
 }
 body #root #home-right-panel #new-order h2 {
   font-size: 2em;
+  text-align: center;
 }
 body #root #home-right-panel #new-order li {
   text-align: center;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 5px;
+  align-items: center;
+  font-size: 1.2em;
+}
+body #root #home-right-panel #new-order li * {
+  font-size: 1em;
+}
+body #root #home-right-panel #new-order li input, body #root #home-right-panel #new-order li textarea {
+  margin: 0;
+}
+body #root #home-right-panel #new-order li a {
+  display: block;
+  cursor: pointer;
+  margin-left: 5px;
+  padding: 3px 10px;
+  font-weight: bold;
+  background: #c8d7da;
+  color: black;
+  border-radius: 5px;
+}
+body #root #home-right-panel #new-order li a:hover, body #root #home-right-panel #new-order li a:active, body #root #home-right-panel #new-order li a:focus {
+  background: #fffb89;
 }
 body #root #home-right-panel #new-order li:nth-last-child(1) {
   padding-top: 20px;
 }
-body #root #home-right-panel #new-order input, body #root #home-right-panel #new-order textarea {
-  font-size: 1.8em;
-  padding: 5px 5px 5px 15px;
-  background: #222;
-  margin: 5px 0;
-  border-radius: 7px;
-  width: 100%;
-  text-align: left;
-}
-body #root #home-right-panel #new-order input::placeholder, body #root #home-right-panel #new-order textarea::placeholder {
+body #root #home-right-panel #new-order li::placeholder {
   color: rgba(200, 215, 218, 0.4);
 }
-body #root #home-right-panel #new-order input:focus, body #root #home-right-panel #new-order textarea:focus {
+body #root #home-right-panel #new-order li:focus {
   border-color: #fffb89;
 }
-body #root #home-right-panel #new-order input:focus-visible, body #root #home-right-panel #new-order textarea:focus-visible {
+body #root #home-right-panel #new-order li:focus-visible {
   outline-width: 0;
 }
 body #root #home-right-panel #new-order ul {
@@ -135,11 +550,14 @@ body #root #home-right-panel #new-order ul {
   padding: 0;
 }
 body #root #home-right-panel #new-order textarea {
-  font-size: 1.5em;
   height: 20vh;
 }
-body #root #home-right-panel #new-order button {
-  font-size: 1.4em;
+body #root #home-left-panel {
+  transition-duration: 0.3s;
+  padding: 1vw;
+  flex-shrink: 10;
+  flex-grow: 0;
+  width: 26vw;
 }
 body #root #home-left-panel h1 {
   font-size: 60px;
@@ -147,9 +565,10 @@ body #root #home-left-panel h1 {
 }
 body #root #home-left-panel h1 a {
   text-decoration: none;
-}
-body #root #home-left-panel h1 a:hover, body #root #home-left-panel h1 a:active, body #root #home-left-panel h1 a:focus {
-  color: #fffb89;
+  white-space: nowrap;
+  font-size: 4vw;
+  padding: 1vw;
+  transition-duration: 0.3s;
 }
 body #root #home-left-panel .search {
   display: flex;
@@ -160,6 +579,8 @@ body #root #home-left-panel .search input {
   font-size: 1.5em;
   text-align: center;
   color: black;
+  width: 20vw;
+  transition-duration: 0.3s;
 }
 body #root #home-left-panel .search button {
   padding: 0;
@@ -177,9 +598,6 @@ body #root #home-left-panel #home-links {
 body #root #home-left-panel #home-links a {
   padding: 10px;
   margin: 3px;
-}
-body #root #home-left-panel #home-links a:hover, body #root #home-left-panel #home-links a:active, body #root #home-left-panel #home-links a:focus {
-  color: #fffb89;
 }
 
 /*# sourceMappingURL=index.css.map */
