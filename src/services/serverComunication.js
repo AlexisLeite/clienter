@@ -58,7 +58,7 @@ class ServerCommunications {
                 tryResolve();
               })
               .catch((error) => {
-                json = { error };
+                json = { status: "error", message: error.stack, error };
                 tryResolve();
               });
           });

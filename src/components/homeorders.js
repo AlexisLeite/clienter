@@ -44,7 +44,7 @@ class HomeOrders extends Component {
                       </div>
                       <i>{result.diagnosis}</i>
                       <strong className="date">
-                        {new Date(result.createdAt).toLocaleDateString()}
+                        {new Date(result.createdAt * 1000).toLocaleDateString()}
                       </strong>
                     </div>
                   </div>

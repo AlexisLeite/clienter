@@ -23,7 +23,7 @@ class CreateForm extends Component {
             this.props.onSave(data);
           }}
         >
-          <Error message={this.props.error} />
+          <Error message={this.props.error} className="no-float" />
           {Object.keys(this.props.fields).map((field) => {
             const value = this.props.fields[field];
             if (typeof value === "string")

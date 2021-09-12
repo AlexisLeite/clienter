@@ -103,7 +103,11 @@ export function EasyEvents() {
 }
 
 export function Error(params) {
-  return params.message ? <div className="error">{params.message}</div> : "";
+  return params.message ? (
+    <div className={`error ${params.className ?? ""}`}>{params.message}</div>
+  ) : (
+    ""
+  );
 }
 
 export function hashes(ammount) {

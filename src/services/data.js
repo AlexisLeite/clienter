@@ -101,7 +101,7 @@ class DataSource {
   getById(id) {
     return new Promise((resolve, reject) => {
       this.fetch("get", `${this.name}s/${id}`).then((res) => {
-        if (res.status === "success") resolve(res.results[0]);
+        if (res && res.status === "success") resolve(res.results[0]);
       });
     });
   }
@@ -285,6 +285,7 @@ export class DataTable extends Component {
                         onClick={(ev) => {
                           ev.stopPropagation();
                           this.props.source.delete(result._id).then((res) => {
+                            console.dir(res);
                             if (res) this.props.source.repeatLastQuery();
                           });
                         }}
@@ -315,5 +316,5 @@ DataTable.propTypes = {
 };
 
 export const Clients = new DataSource("client", { perPage: 10, sort: { name: 1 } });
-export const Orders = new DataSource("order", { perPage: 5 });
+export const Orders = new DataSource("order", { sort: { updatedAt: -1 }, perPage: 5 });
 export const Updates = new DataSource("update");

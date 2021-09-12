@@ -52,15 +52,7 @@ class SplitView extends Component {
       <>
         <div id="home-left-panel">
           <h1>
-            <a
-              href="/"
-              onClick={(ev) => {
-                ev.preventDefault();
-                History.go("/");
-              }}
-            >
-              IA Uruguay
-            </a>
+            <Link to="/">Clienter</Link>
           </h1>
           <div className="search">
             <Route exact path="/">

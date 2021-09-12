@@ -13,7 +13,9 @@ class Orderdetails extends Component {
   componentDidMount() {
     easySuscriptions.call(this);
     this.makeSuscriptions(
-      Orders.onError((error) => this.setState(error)),
+      Orders.onError((error) => {
+        this.setState({ error });
+      }),
       Updates.onError((error) => {
         this.setState({ error });
       })
@@ -39,7 +41,7 @@ class Orderdetails extends Component {
       return (
         <Kind
           type="text"
-          value={this.state.editedOrder[props.field] ?? ""}
+          value={this.state.editedOrder[props.field] ?? this.state.order[props.field]}
           onKeyDown={(ev) => {
             if (ev.key === "Escape") {
               this.cancelEditing();
@@ -56,21 +58,21 @@ class Orderdetails extends Component {
         />
       );
     } else {
-      return this.state.order[props.field];
+      return this.state.order[props.field] ?? "";
     }
   };
 
   update() {
     Orders.getById(this.props.match.params.id).then((order) => {
       order.updates = order.updates.reverse();
-      this.setState({ editedOrder: { ...order }, order, error: null, editing: false });
+      this.setState({ editedOrder: {}, order, error: null, editing: false });
     });
   }
 
   cancelEditing = () => {
     this.setState({
       editing: false,
-      editedOrder: { ...this.state.order },
+      editedOrder: {},
     });
   };
 
@@ -181,7 +183,7 @@ class Orderdetails extends Component {
             <tbody>
               <tr>
                 <th>Fecha</th>
-                <td>{new Date(order.createdAt).toLocaleDateString()}</td>
+                <td>{new Date(order.createdAt * 1000).toLocaleDateString()}</td>
               </tr>
               <tr>
                 <th>Equipo</th>
@@ -215,7 +217,7 @@ class Orderdetails extends Component {
               </tr>
               <tr>
                 <th>Presupuesto final</th>
-                <td className="number">{order.totalBudget}</td>
+                <td className="number">{order.totalBudget ?? 0}</td>
               </tr>
             </tbody>
             {order.updates.length > 0 && (
@@ -259,7 +261,9 @@ class Orderdetails extends Component {
                                   onClick={(ev) => {
                                     ev.preventDefault();
                                     ev.stopPropagation();
-                                    Updates.delete(update._id).then(() => this.update());
+                                    Updates.delete(update._id).then((res) => {
+                                      if (res) this.update();
+                                    });
                                   }}
                                 >
                                   X
@@ -268,7 +272,7 @@ class Orderdetails extends Component {
                               <td>{update.title}</td>
                               <th>Fecha</th>
                               <td width="100px">
-                                {new Date(update.createdAt).toLocaleDateString()}
+                                {new Date(update.createdAt * 1000).toLocaleDateString()}
                               </td>
                             </tr>
                           </thead>
@@ -288,37 +292,38 @@ class Orderdetails extends Component {
             )}
           </table>
         </div>
-
-        <div className="navigation">
-          {this.state.editing ? (
-            <>
-              <button className="cancel" onClick={this.cancelEditing}>
-                Cancelar
-              </button>
-              <button onClick={this.saveEditing}>Guardar</button>
-            </>
-          ) : (
-            <>
-              <button
-                onClick={() => {
-                  this.setState({ showAddUpdate: true });
-                }}
-              >
-                Agregar actualización
-              </button>
-              <button
-                onClick={() => {
-                  Orders.delete(order._id).then((res) => {
-                    if (res) History.go("/");
-                  });
-                }}
-              >
-                Eliminar
-              </button>
-              <button onClick={this.startEditing}>Editar</button>
-            </>
-          )}
-        </div>
+        {
+          <div className="navigation">
+            {this.state.editing ? (
+              <>
+                <button className="cancel" onClick={this.cancelEditing}>
+                  Cancelar
+                </button>
+                <button onClick={this.saveEditing}>Guardar</button>
+              </>
+            ) : (
+              <>
+                <button
+                  onClick={() => {
+                    this.setState({ showAddUpdate: true });
+                  }}
+                >
+                  Agregar actualización
+                </button>
+                <button
+                  onClick={() => {
+                    Orders.delete(order._id).then((res) => {
+                      if (res) History.go("/");
+                    });
+                  }}
+                >
+                  Eliminar
+                </button>
+                <button onClick={this.startEditing}>Editar</button>
+              </>
+            )}
+          </div>
+        }
       </>
     ) : (
       "Nada para mostrar"

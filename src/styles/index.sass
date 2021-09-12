@@ -167,13 +167,26 @@ body
             background: transparentize($primary-hover, 0.95)
 
     .error
+      position: fixed
+      top: 0
+      left: 0
+      right: 0
+      text-align: center
       color: red
       text-shadow: 0 0 #fff7
+      z-index: 11
+
+      &.no-float
+        position: static
+        top: auto
+        left: auto
+        bottom: auto
+        text-align: left
 
     .navigation
       display: flex
       justify-content: center
-      position: absolute
+      position: fixed
       bottom: 10px
       flex-wrap: wrap
 

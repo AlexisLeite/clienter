@@ -26,7 +26,7 @@ export function unfixRootClass() {
   fixed = false;
 }
 
-const timing = 4000;
+const timing = 8000;
 
 setInterval(() => {
   if (Date.now() - lastMove > (timing * 5) / 6) setRootClass("elegant");
@@ -38,7 +38,7 @@ window.addEventListener("keydown", resetUpdate);
 function App() {
   return (
     <>
-      <BrowserRouter>
+      <BrowserRouter basename="/app/clienter">
         <SplitView />
       </BrowserRouter>
     </>

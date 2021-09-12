@@ -46,7 +46,7 @@ class NewOrder extends Component {
             data.status = "Reparando";
 
             Orders.create(data).then((res) => {
-              if (exists(res, "status") === "success") History.go(`/orders/${res.results[0].id}`);
+              if (exists(res, "status") === "success") History.go(`/orders/${res.results[0]._id}`);
             });
           }}
         >
